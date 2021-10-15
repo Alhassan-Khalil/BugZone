@@ -10,6 +10,7 @@ public class InputHandler : MonoBehaviour
 
     [Header("Sub Behaviours")]
     public PlayerMovement playerMovement;
+    public PlayerAnimation playerAnimation;
 
 
     [Header("Input Settings")]
@@ -56,10 +57,12 @@ public class InputHandler : MonoBehaviour
         {
         Vector2 inputMovement = context.ReadValue<Vector2>();
         rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+            playerAnimation.updateMovement(true);
         }
         if (context.canceled)
         {
             rawInputMovement = Vector3.zero;
+            playerAnimation.updateMovement(false);
         }
 
     }
@@ -95,6 +98,7 @@ public class InputHandler : MonoBehaviour
         {
             ToggleCrouch = true;
             playerMovement.OnCrouch(ToggleCrouch);
+            playerAnimation.Crouch(true);
         }
         if (context.performed)
         {
@@ -103,6 +107,7 @@ public class InputHandler : MonoBehaviour
         {
             ToggleCrouch = false;
             playerMovement.OnCrouch(ToggleCrouch);
+            playerAnimation.Crouch(false);
         }
     }
     public void OnSprintInput(InputAction.CallbackContext context)
