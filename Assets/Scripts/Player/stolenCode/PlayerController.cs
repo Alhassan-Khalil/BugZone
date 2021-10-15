@@ -215,7 +215,6 @@ public class PlayerController : MonoBehaviour {
         if (!enableSlide) return;
 
         rb.AddForce(orientation.forward * slideForce, ForceMode.Impulse);
-
         sliding = true;
         timeSinceLastSlide = 0f;
 

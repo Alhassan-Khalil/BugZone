@@ -109,6 +109,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (playerRigidbody.velocity.magnitude > maxSpeed) dir = Vector3.zero;
         playerRigidbody.AddForce(GetMovementVector(-playerRigidbody.velocity, dir.normalized, CurSpeed * Time.fixedDeltaTime) * ((grounded && Jumping) ? multiplier : playerData.inAirMovementModifier));
+
+        Debug.Log(playerRigidbody.velocity);
     }
 
     private Vector3 GetMovementVector(Vector3 velocity, Vector3 dir, float speed)
@@ -163,22 +165,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private bool CanSlide()
-    {
-        return playerRigidbody.velocity.magnitude > playerData.slideSpeedThreshold && grounded && Crouching && !Sliding && TimeSinceLastSlide >= playerData.slideCooldown && CurrentSlope < playerData.maxSlope;
-    }
-    private void Slide()
-    {
-        if (!enableSlide) return;
-        
-        playerRigidbody.AddForce(orientation.forward * playerData.slideForce, ForceMode.Impulse);
-        Sliding = true;
-        TimeSinceLastSlide = 0f;
 
-        StartCoroutine(StopProjectedSlide(playerRigidbody.velocity));
-
-
-    }
 
     private void OnCollisionStay(Collision collision)
     {
@@ -213,6 +200,17 @@ public class PlayerMovement : MonoBehaviour
 
 
 
+    private void Slide()
+    {
+        if (!enableSlide) return;
+
+        playerRigidbody.AddForce(orientation.forward * playerData.slideForce, ForceMode.Impulse);
+        Sliding = true;
+        TimeSinceLastSlide = 0f;
+
+        StartCoroutine(StopProjectedSlide(playerRigidbody.velocity));
+    }
+
     private IEnumerator StopProjectedSlide(Vector3 momentum)
     {
         //f*ing stupid f*ing physics dumb dumb math go BRRRR
@@ -233,6 +231,23 @@ public class PlayerMovement : MonoBehaviour
         }
 
         Sliding = false;
+    }
+
+    private bool CanSlide()
+    {
+        if(playerRigidbody.velocity.z < 0f)
+        {
+            return false;
+        }
+        else
+        {
+            return playerRigidbody.velocity.magnitude > playerData.slideSpeedThreshold && grounded && Crouching && !Sliding && TimeSinceLastSlide >= playerData.slideCooldown && CurrentSlope < playerData.maxSlope;
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (CanSlide()) Slide();
     }
 
 }

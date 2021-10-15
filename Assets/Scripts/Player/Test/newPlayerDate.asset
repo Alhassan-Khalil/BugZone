@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 98cf9efa8e1f29c45a2b2e62d85f46c3, type: 3}
-  m_Name: PlayerData
+  m_Name: newPlayerDate
   m_EditorClassIdentifier: 
   moveSpeed: 350
   moveMultiplier: 9
@@ -29,8 +29,8 @@ MonoBehaviour:
   crouchMoveMultiplier: 0.5
   crouchMaxSpeed: 5
   crouchJumpMultiplier: 1.4
-  crouchheight: 1
-  slideForce: 50
+  crouchheight: 1.5
+  slideForce: 25
   slideFriction: 3
   slideCooldown: 1
   slideSpeedThreshold: 5
