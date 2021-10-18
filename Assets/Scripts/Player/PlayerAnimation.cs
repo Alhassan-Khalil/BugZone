@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
+    [Header("Component References")]
     private Animator Anim;
 
     private void Start()
@@ -12,13 +13,19 @@ public class PlayerAnimation : MonoBehaviour
 
     }
 
-    public void updateMovement(bool Value)
+    public void updateMovement(float Value)
     {
-        Anim.SetBool("isWalking", Value);
+        Anim.SetFloat("Movement",Value,0.1f,Time.deltaTime);
     }
 
     public void Crouch(bool Value)
     {
         Anim.SetBool("isCrouching", Value);
     }
+    public void slide()
+    {
+        Debug.Log("slide time");
+        Anim.SetTrigger("isSliding");
+    }
+
 }

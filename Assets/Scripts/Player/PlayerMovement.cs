@@ -6,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField]
     private PlayerData playerData = default;
+    //public PlayerAnimation playerAnimation;
 
 
     [Header("Component References")]
@@ -41,6 +42,7 @@ public class PlayerMovement : MonoBehaviour
     private float TimeSinceLastSlide = Mathf.Infinity;
     private float CurrentSlope = 0f;
     private int amountOfJumpLeft;
+    private Vector2 fkingslide;
 
     //public bool JumpInputStop;
     public bool Jumping;
@@ -74,6 +76,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (TimeSinceLastSlide < playerData.slideCooldown) TimeSinceLastSlide += Time.deltaTime;
+
     }
     public void UpdateMouseLook(Vector2 MouseInput)
     {
@@ -86,15 +89,16 @@ public class PlayerMovement : MonoBehaviour
         xRotation -= MouseInput.y;
         xRotation = Mathf.Clamp(xRotation, -playerData.maxAngle, playerData.maxAngle);
 
+
         playerCamera.localRotation = Quaternion.Euler(xRotation, xTo, 0f);
-        orientation.localRotation = Quaternion.Euler(0f, xTo, 0f);
+        transform.localRotation = Quaternion.Euler(0f, xTo, 0f);
     }
 
-    public void UpdateMovementData(Vector3 moveInput)
+    public void UpdateMovementData(Vector2 moveInput)
     {
         if (!hasControl) return;
-
-        Vector3 dir = orientation.right * moveInput.x + orientation.forward * moveInput.z;
+        fkingslide = moveInput;
+        Vector3 dir = orientation.right * moveInput.x + orientation.forward * moveInput.y;
         playerRigidbody.AddForce(Vector3.down * Time.fixedDeltaTime * playerData.Graviry);//add force down 
 
         if (autoJump && Jumping && grounded) OnJump(Jumping);
@@ -110,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerRigidbody.velocity.magnitude > maxSpeed) dir = Vector3.zero;
         playerRigidbody.AddForce(GetMovementVector(-playerRigidbody.velocity, dir.normalized, CurSpeed * Time.fixedDeltaTime) * ((grounded && Jumping) ? multiplier : playerData.inAirMovementModifier));
 
-        Debug.Log(playerRigidbody.velocity);
+        Debug.Log(fkingslide);
     }
 
     private Vector3 GetMovementVector(Vector3 velocity, Vector3 dir, float speed)
@@ -206,6 +210,7 @@ public class PlayerMovement : MonoBehaviour
 
         playerRigidbody.AddForce(orientation.forward * playerData.slideForce, ForceMode.Impulse);
         Sliding = true;
+        SetColliderHeight(playerData.crouchheight);
         TimeSinceLastSlide = 0f;
 
         StartCoroutine(StopProjectedSlide(playerRigidbody.velocity));
@@ -229,13 +234,13 @@ public class PlayerMovement : MonoBehaviour
 
             yield return null;
         }
-
         Sliding = false;
+        SetColliderHeight(orginalHeight);
     }
 
     private bool CanSlide()
     {
-        if(playerRigidbody.velocity.z < 0f)
+        if (fkingslide.y < 0f)
         {
             return false;
         }
@@ -243,11 +248,16 @@ public class PlayerMovement : MonoBehaviour
         {
             return playerRigidbody.velocity.magnitude > playerData.slideSpeedThreshold && grounded && Crouching && !Sliding && TimeSinceLastSlide >= playerData.slideCooldown && CurrentSlope < playerData.maxSlope;
         }
+
     }
 
     private void OnCollisionEnter(Collision other)
     {
         if (CanSlide()) Slide();
     }
+
+
+
+
 
 }

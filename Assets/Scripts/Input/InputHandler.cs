@@ -25,10 +25,11 @@ public class InputHandler : MonoBehaviour
     [SerializeField]
     private float inputHoldTime = 0.2f;
 
-    public bool JumpInput { get; private set; }
-    public bool JumpInputStop { get; private set; }
-    public bool ToggleCrouch { get; private set; }
-    public bool ToggleSprint { get; private set; }
+    public bool JumpInput;
+    public bool JumpInputStop;
+    public bool ToggleCrouch;
+    public bool ToggleSprint;
+    public bool isWalking;
 
 
     //Action Maps
@@ -49,22 +50,43 @@ public class InputHandler : MonoBehaviour
     {
         //CalculateMovementInputSmoothing();
         UpdatePlayerMouse();
+        UpdatePlayerAnimationMovement();
     }
 
     public void OnMoveInput(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-        Vector2 inputMovement = context.ReadValue<Vector2>();
-        rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
-            playerAnimation.updateMovement(true);
+            Vector2 inputMovement = context.ReadValue<Vector2>();
+            //rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
+            rawInputMovement = new Vector2(inputMovement.x, inputMovement.y);
+            isWalking = true;
         }
         if (context.canceled)
         {
             rawInputMovement = Vector3.zero;
-            playerAnimation.updateMovement(false);
+            isWalking = false;
         }
+    }
 
+    public void UpdatePlayerAnimationMovement()
+    {
+        if (playerMovement.Sliding)
+        {
+            playerAnimation.slide();
+        }
+        if (!isWalking && !ToggleSprint)
+        {
+            playerAnimation.updateMovement(0f);
+        }
+        else if (isWalking && !ToggleSprint)
+        {
+            playerAnimation.updateMovement(0.5f);
+        }
+        else if (isWalking && ToggleSprint)
+        {
+            playerAnimation.updateMovement(1f);
+        }
     }
 
     public void OnMouseInput(InputAction.CallbackContext context)

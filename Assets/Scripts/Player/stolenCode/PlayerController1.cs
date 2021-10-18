@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : MonoBehaviour {
+public class PlayerController1 : MonoBehaviour {
     [Header("Movement Settings")]
     [SerializeField] private bool hasControl = true;
     [SerializeField] private float moveSpeed = 500f;
