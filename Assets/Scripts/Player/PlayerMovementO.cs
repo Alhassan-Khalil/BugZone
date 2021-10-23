@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovementO : MonoBehaviour
 {
     [SerializeField]
     private PlayerData playerData = default;
@@ -114,7 +114,7 @@ public class PlayerMovement : MonoBehaviour
         if (playerRigidbody.velocity.magnitude > maxSpeed) dir = Vector3.zero;
         playerRigidbody.AddForce(GetMovementVector(-playerRigidbody.velocity, dir.normalized, CurSpeed * Time.fixedDeltaTime) * ((grounded && Jumping) ? multiplier : playerData.inAirMovementModifier));
 
-        Debug.Log(fkingslide);
+        //Debug.Log(fkingslide);
     }
 
     private Vector3 GetMovementVector(Vector3 velocity, Vector3 dir, float speed)
@@ -144,8 +144,8 @@ public class PlayerMovement : MonoBehaviour
         if (grounded)
         {
             //If crouching and not sliding: crouch jump multiplier, if sliding: slide jump multiplier, and if all else is false: normal jump multiplier.
-            float slideJumpMultiplier = playerRigidbody.velocity.y < 0 ? playerRigidbody.velocity.magnitude * 0.1f + playerData.jumpMultiplier : playerData.crouchJumpMultiplier; //scales to speed
-            float currentMultiplier = Crouching && CurrentSlope < playerData.maxSlope ? playerData.crouchJumpMultiplier : Crouching && CurrentSlope >= playerData.maxSlope ? slideJumpMultiplier : playerData.jumpMultiplier;
+            float slideJumpMultiplier = playerRigidbody.velocity.y < 0 ? playerRigidbody.velocity.magnitude * 0.1f + playerData.jumpHiightMultiplier : playerData.crouchJumpMultiplier; //scales to speed
+            float currentMultiplier = Crouching && CurrentSlope < playerData.maxSlope ? playerData.crouchJumpMultiplier : Crouching && CurrentSlope >= playerData.maxSlope ? slideJumpMultiplier : playerData.jumpHiightMultiplier;
             playerRigidbody.AddForce(Vector2.up * playerData.jumpForce * currentMultiplier, ForceMode.Impulse);
             grounded = false;
         }

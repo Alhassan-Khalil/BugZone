@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 350
   moveMultiplier: 9
+  inAirMovementModifier: 5
+  jumpForce: 15
+  amountOfJump: 2
+  jumpHiightMultiplier: 0.5
   groundMaxSpeed: 20
   friction: 230
   maxSlope: 15
   Graviry: 10
-  inAirMaxSpeed: 30
-  inAirMovementModifier: 0.8
   inAirDrag: 160
+  inAirMaxSpeed: 30
   sprintMultiplier: 20
   sprintMaxSpeedModifier: 8
-  jumpForce: 7
-  jumpMultiplier: 1.5
-  amountOfJump: 2
   crouchMoveMultiplier: 0.5
   crouchMaxSpeed: 5
   crouchJumpMultiplier: 1.4

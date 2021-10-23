@@ -24,8 +24,12 @@ public class PlayerAnimation : MonoBehaviour
     }
     public void slide()
     {
-        Debug.Log("slide time");
         Anim.SetTrigger("isSliding");
+    }
+
+    public void jump(bool Value)
+    {
+        Anim.SetBool("isjumping",Value);
     }
 
 }

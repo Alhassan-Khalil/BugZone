@@ -6,28 +6,34 @@ using UnityEngine.InputSystem;
 
 public class InputHandler : MonoBehaviour
 {
+
+    #region Old
+
     private PlayerInput inputs;
 
     [Header("Sub Behaviours")]
-    public PlayerMovement playerMovement;
+    public PlayerMovementO playerMovement;
     public PlayerAnimation playerAnimation;
 
 
     [Header("Input Settings")]
     public PlayerInput playerInput;
     public float movementSmoothingSpeed = 1f;
-    private Vector3 rawInputMovement;
+    public Vector2 RawInputMovement { get; private set; }
+    public Vector2 smothInputMovement { get; private set; }
     private Vector2 rawInputMouse;
-    private Vector3 smoothInputMovement;
-    private float jumpInputStartTime;
+    private Vector2 smothInputMovementVelocity;
 
 
     [SerializeField]
     private float inputHoldTime = 0.2f;
 
+    private float jumpTimer;
+
     public bool JumpInput;
     public bool JumpInputStop;
     public bool ToggleCrouch;
+    public bool HoldCrouch;
     public bool ToggleSprint;
     public bool isWalking;
 
@@ -39,18 +45,21 @@ public class InputHandler : MonoBehaviour
     //Current Control Scheme
     private string currentControlScheme;
 
-
+    private void Start()
+    {
+        jumpTimer = -1;
+    }
     private void FixedUpdate()
     {
         UpdatePlayerMovement();
-        
     }
 
     private void Update()
     {
         //CalculateMovementInputSmoothing();
         UpdatePlayerMouse();
-        UpdatePlayerAnimationMovement();
+        //UpdatePlayerAnimationMovement();
+        CheckJumpInputHoldTime();
     }
 
     public void OnMoveInput(InputAction.CallbackContext context)
@@ -59,12 +68,13 @@ public class InputHandler : MonoBehaviour
         {
             Vector2 inputMovement = context.ReadValue<Vector2>();
             //rawInputMovement = new Vector3(inputMovement.x, 0, inputMovement.y);
-            rawInputMovement = new Vector2(inputMovement.x, inputMovement.y);
+            RawInputMovement = new Vector2(inputMovement.x, inputMovement.y);
+            //smothInputMovement =Vector2.SmoothDamp(rawInputMovement, inputMovement, ref smothInputMovementVelocity,0.2f);
             isWalking = true;
         }
         if (context.canceled)
         {
-            rawInputMovement = Vector3.zero;
+            RawInputMovement = Vector2.zero;
             isWalking = false;
         }
     }
@@ -101,8 +111,9 @@ public class InputHandler : MonoBehaviour
         {
             JumpInput = true;
             JumpInputStop = false;
-            jumpInputStartTime = Time.time;
-            playerMovement.OnJump(JumpInput);
+            jumpTimer = Time.time;
+            //playerMovement.OnJump(JumpInput);
+            jumpTimer++;
         }
         if (context.performed)
         {
@@ -111,7 +122,8 @@ public class InputHandler : MonoBehaviour
         {
             JumpInput = false;
             JumpInputStop = true;
-            playerMovement.OnJump(JumpInput);
+            //playerMovement.OnJump(JumpInput);
+            playerAnimation.jump(false);
         }
     }
     public void OnCrouchInput(InputAction.CallbackContext context)
@@ -119,16 +131,19 @@ public class InputHandler : MonoBehaviour
         if (context.started)
         {
             ToggleCrouch = true;
-            playerMovement.OnCrouch(ToggleCrouch);
+            //playerMovement.OnCrouch(ToggleCrouch);
             playerAnimation.Crouch(true);
         }
         if (context.performed)
         {
+            HoldCrouch = true;
         }
         if (context.canceled)
         {
             ToggleCrouch = false;
-            playerMovement.OnCrouch(ToggleCrouch);
+            HoldCrouch = false;
+
+            //playerMovement.OnCrouch(ToggleCrouch);
             playerAnimation.Crouch(false);
         }
     }
@@ -137,7 +152,7 @@ public class InputHandler : MonoBehaviour
         if (context.started)
         {
             ToggleSprint = true;
-            playerMovement.OnSprint(ToggleSprint);
+            //playerMovement.OnSprint(ToggleSprint);
         }
         if (context.performed)
         {
@@ -145,18 +160,21 @@ public class InputHandler : MonoBehaviour
         if (context.canceled)
         {
             ToggleSprint = false;
-            playerMovement.OnSprint(ToggleSprint);
+            //playerMovement.OnSprint(ToggleSprint);
         }
     }
 
     private void CheckJumpInputHoldTime()
     {
-        if (Time.time >= jumpInputStartTime + inputHoldTime)
+        if (Time.time >= jumpTimer + inputHoldTime)
         {
             JumpInput = false;
         }
     }
-
+    public void ResetJump()
+    {
+        jumpTimer = -1;
+    }
 
     public void UseJumpInput() => JumpInput = false;
 
@@ -168,14 +186,17 @@ public class InputHandler : MonoBehaviour
 
     void UpdatePlayerMovement()
     {
-        playerMovement.UpdateMovementData(rawInputMovement);
+        //playerMovement.UpdateMovementData(rawInputMovement);
     }
     void UpdatePlayerMouse()
     {
 
-        playerMovement.UpdateMouseLook(rawInputMouse);
+        //playerMovement.UpdateMouseLook(rawInputMouse);
 
     }
+
+
+    #endregion
 
 
 }

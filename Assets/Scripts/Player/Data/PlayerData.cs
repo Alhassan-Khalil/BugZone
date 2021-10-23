@@ -7,34 +7,43 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
 
-    [Header("Movement Settings")]
+
+    #region adv
     [SerializeField] public float moveSpeed = 350f;
     [SerializeField] public float moveMultiplier = 9f;
+    [SerializeField] public float inAirMovementModifier = 10f;
+    [SerializeField] public float inAirMovementModifierSprint = 15;
+    [SerializeField] public float crouchheight = 1.5f;
+    [SerializeField] public float Standheight = 2.044783f;
+    [SerializeField] public float crouchMoveMultiplier = 0.5f;
+
+    [Header("Jump Settings")]
+    [SerializeField] public float jumpForce = 7f;
+    [SerializeField] public int amountOfJump = 2;
+    [SerializeField] public float jumpHiightMultiplier = 1.5f;
+    #endregion
+
+
+
+    [Header("Movement Settings")]
     [SerializeField] public float groundMaxSpeed = 20f;
     [SerializeField] public float friction = 230f;
     [SerializeField] public float maxSlope = 15f;
     [SerializeField] public float Graviry = 10f;
 
     [Space(15)]
-    [SerializeField] public float inAirMaxSpeed = 30f;
-    [SerializeField] public float inAirMovementModifier = 0.8f;
     [SerializeField] public float inAirDrag = 160f;
+    [SerializeField] public float inAirMaxSpeed = 30f;
 
     [Header("Sprint Settings")]
     [SerializeField] public float sprintMultiplier = 20f;
     [SerializeField] [Tooltip("Adds to the original max speed.")] public float sprintMaxSpeedModifier = 8f;
 
-    [Header("Jump Settings")]
-    [SerializeField] public float jumpForce = 7f;
-    [SerializeField] public float jumpMultiplier = 1.5f;
-    [SerializeField] public int amountOfJump = 2;
 
 
     [Header("Crouch Settings")]
-    [SerializeField] public float crouchMoveMultiplier = 0.5f;
     [SerializeField] public float crouchMaxSpeed = 5f;
     [SerializeField] public float crouchJumpMultiplier = 1.4f;
-    [SerializeField] public float crouchheight = 1.5f;
 
 
     [Header("Slide Settings")]
