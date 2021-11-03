@@ -16,6 +16,8 @@ public class PlayerCrouchState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
+
+
         player.SetColliderHeight(playerData.crouchheight);
     }
 
@@ -43,6 +45,7 @@ public class PlayerCrouchState : PlayerGroundedState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
-        player.SetVelocityTest(playerData.crouchMoveMultiplier * dir);
+        //player.SetVelocityTest(playerData.crouchMoveMultiplier * dir);
+        player.RB.AddForce(dir.normalized * playerData.moveSpeed * playerData.crouchMoveMultiplier, ForceMode.Acceleration);
     }
 }

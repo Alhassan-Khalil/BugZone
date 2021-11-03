@@ -12,9 +12,11 @@ public class PlayerGroundedState : PlayerState
     protected bool isSprinting;
     protected bool OnCrouch;
     protected bool onSlope;
+    protected bool Sliding;
 
-    private bool jumpInput;
-    protected bool isgrounded;
+    protected bool jumpInput;
+    protected bool isGrounded;
+    protected float timeSinceLastSlide = Mathf.Infinity;
 
 
     public PlayerGroundedState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolname) : base(player, stateMachine, playerData, animBoolname)
@@ -24,7 +26,7 @@ public class PlayerGroundedState : PlayerState
     public override void DoCheck()
     {
         base.DoCheck();
-        isgrounded = player.grounded;
+        isGrounded = player.grounded;
     }
 
     public override void Enter()
@@ -50,20 +52,20 @@ public class PlayerGroundedState : PlayerState
 
         slopMoveDir = Vector3.ProjectOnPlane(dir, player.slopeHit.normal);
 
-        if(isgrounded && OnCrouch)
-        {
-            stateMachine.ChangeState(player.CrouchState);
-        }
-        if(isgrounded && OnCrouch && isSprinting)
+/*        if (CanSlide() && isSprinting)
         {
             stateMachine.ChangeState(player.SlidingState);
         }
-        else if (jumpInput && player.JumpState.CanJump())
+        if(isGrounded && OnCrouch && !isSprinting)
+        {
+            stateMachine.ChangeState(player.CrouchState);
+        }*/
+        if (jumpInput && player.JumpState.CanJump())
         {
             player.InputHandler.useJumpInput();
             stateMachine.ChangeState(player.JumpState);
         }
-        else if (!isgrounded)
+        else if (!isGrounded)
         {
             player.JumpState.DecreaseAmountOfJumpLeft();
             stateMachine.ChangeState(player.InAirState);
@@ -74,5 +76,12 @@ public class PlayerGroundedState : PlayerState
     {
         base.PhysicsUpdate();
         dir = player.orientation.right * input.x + player.orientation.forward * input.y;
+    }
+
+
+
+    public bool CanSlide()
+    {
+        return player.RB.velocity.magnitude > playerData.slideSpeedThreshold && isGrounded && OnCrouch && !Sliding && timeSinceLastSlide >= playerData.slideCooldown && player.currentSlope < playerData.maxSlope;
     }
 }

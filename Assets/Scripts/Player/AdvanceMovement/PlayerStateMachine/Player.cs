@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask groundLayer = default;
     public bool grounded;
 
-
+    public float currentSlope=0f;
     public RaycastHit slopeHit;
     #endregion
 
@@ -96,6 +96,7 @@ public class Player : MonoBehaviour
 
     public void SetVelocityTest(Vector3 velocity)
     {
+        //RB.AddForce(velocity);
         workspace.Set(velocity.x,CurrentVelocity.y,velocity.z);
         SetFinalVelocity();
 
@@ -108,6 +109,7 @@ public class Player : MonoBehaviour
 
     public void jump()
     {
+        //RB.AddForce(orientation.up * playerData.jumpForce, ForceMode.VelocityChange);
         //RB.AddForce(transform.up* playerData.jumpForce, ForceMode.Impulse);
         //Add jump forces
         RB.AddForce(Vector2.up * playerData.jumpForce * 1.5f);
@@ -153,10 +155,16 @@ public class Player : MonoBehaviour
             }
 
             Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, slopeRaycastDistance, groundLayer);
+            currentSlope = Vector3.Angle(Vector3.up, hit.normal);
         }
     }
     private void OnCollisionExit(Collision other) => grounded = false;
 
+    private void OnCollisionEnter(Collision other)
+    {
+        if (SlidingState.CanSlide()) StateMachine.ChangeState(SlidingState);
+        Debug.Log("from collision");
+    }
 
     public bool OnSlope()
     {
@@ -213,7 +221,31 @@ public class Player : MonoBehaviour
         playerCamera.localRotation = Quaternion.Euler(xRotation, xTo, 0f);
         orientation.localRotation = Quaternion.Euler(0f, xTo, 0f);
     }
+    public void slidstop()
+    {
+        StartCoroutine(StopProjectedSlide(RB.velocity));
+    }
+    private IEnumerator StopProjectedSlide(Vector3 momentum)
+    {
+        //f*ing stupid f*ing physics dumb dumb math go BRRRR
+        Vector3 velocity = momentum / RB.mass; //find velocity after slide
+        Vector3 finalPos = transform.position + velocity; //estimated final position
+        float distToPos = Vector3.Distance(transform.position, finalPos); //distance between final position and current position
 
+        if (playerData.debugSlideTrajectory) Debug.DrawLine(transform.position, finalPos, Color.blue, 5f);
+
+        while (InputHandler.Crouch && distToPos > playerData.slideStopThreshold && currentSlope < playerData.maxSlope)
+        {
+            distToPos = Vector3.Distance(transform.position, finalPos); // update distance to final position
+
+            if (playerData.debugSlideTrajectory)
+                print($"Distance to final pos: {distToPos} | Arrived: {distToPos < playerData.slideStopThreshold}");
+
+            yield return null;
+        }
+
+        SlidingState.setSlide();
+    }
 
 
     #endregion  

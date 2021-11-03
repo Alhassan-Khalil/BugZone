@@ -217,7 +217,7 @@ public class PlayerController1 : MonoBehaviour {
         rb.AddForce(orientation.forward * slideForce, ForceMode.Impulse);
         sliding = true;
         timeSinceLastSlide = 0f;
-
+        Debug.Log("i am sliding");
         StartCoroutine(StopProjectedSlide(rb.velocity));
     }
 

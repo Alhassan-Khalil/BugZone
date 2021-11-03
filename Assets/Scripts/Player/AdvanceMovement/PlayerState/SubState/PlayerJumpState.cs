@@ -16,7 +16,7 @@ public class PlayerJumpState : PlayerAbiltyState
     {
         base.Enter();
         player.InputHandler.useJumpInput();
-        player.jump();
+        Jump();
         IsAbilityDone = true;
         amountOfJumpLeft--;
         player.InAirState.setIsJumping(); 
@@ -31,6 +31,20 @@ public class PlayerJumpState : PlayerAbiltyState
         {
             return false;
         }
+    }
+
+
+
+    public void Jump()
+    {
+        player.RB.velocity = new Vector3(player.RB.velocity.x, 0, player.RB.velocity.z);
+        player.RB.AddForce(player.orientation.up * playerData.jumpForce, ForceMode.Impulse);
+
+        Vector3 vel = player.RB.velocity;
+        if (player.RB.velocity.y < 0.5f)
+            player.RB.velocity = new Vector3(vel.x, 0, vel.z);
+        else if (player.RB.velocity.y > 0)
+            player.RB.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
     }
     public void RestAmountOfJumpsLeft() => amountOfJumpLeft = playerData.amountOfJump;
 

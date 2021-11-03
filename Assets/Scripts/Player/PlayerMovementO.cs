@@ -56,8 +56,8 @@ public class PlayerMovementO : MonoBehaviour
     {
         get
         {
-            if (!enableSprint) return playerData.moveSpeed * playerData.moveMultiplier;
-            return playerData.moveSpeed * (Sprinting ? playerData.sprintMultiplier : playerData.moveMultiplier);
+            if (!enableSprint) return playerData.moveSpeed * playerData.movementMultiplier;
+            return playerData.moveSpeed * (Sprinting ? playerData.sprintMultiplier : playerData.movementMultiplier);
         }
     }
     private float maxSpeed
@@ -112,7 +112,7 @@ public class PlayerMovementO : MonoBehaviour
         float multiplier = grounded && Crouching ? playerData.crouchMoveMultiplier : 1f;
 
         if (playerRigidbody.velocity.magnitude > maxSpeed) dir = Vector3.zero;
-        playerRigidbody.AddForce(GetMovementVector(-playerRigidbody.velocity, dir.normalized, CurSpeed * Time.fixedDeltaTime) * ((grounded && Jumping) ? multiplier : playerData.inAirMovementModifier));
+        playerRigidbody.AddForce(GetMovementVector(-playerRigidbody.velocity, dir.normalized, CurSpeed * Time.fixedDeltaTime) * ((grounded && Jumping) ? multiplier : playerData.airMultiplier));
 
         //Debug.Log(fkingslide);
     }
@@ -121,7 +121,7 @@ public class PlayerMovementO : MonoBehaviour
     {
         if (!grounded && velocity.magnitude != 0 && enableInAirDrag || velocity.magnitude != 0 && enableInAirDrag && Jumping)
         {
-            float drop = playerData.inAirDrag * Time.fixedDeltaTime;
+            float drop = playerData.airDrag * Time.fixedDeltaTime;
             velocity *= drop != 0f ? drop : 1f;
 
             return new Vector3(velocity.x, 0f, velocity.z) + dir * speed;

@@ -43,6 +43,8 @@ public class PlayerInAirState : PlayerState
         jumpinput = player.InputHandler.JumpInput;
         jumpInputStop = player.InputHandler.JumpInputStop;
 
+        player.RB.drag = playerData.airDrag;
+
         CheckJumpMultiplayier();
 
         if (isgrounded && player.CurrentVelocity.y < 0.01f)
@@ -55,11 +57,11 @@ public class PlayerInAirState : PlayerState
         }
         else if (player.InputHandler.Sprint)
         {
-            player.SetVelocityTest(playerData.inAirMovementModifierSprint * dir);
+            player.RB.AddForce(dir.normalized * playerData.moveSpeed * playerData.movementMultiplier * playerData.airMultiplierSprint, ForceMode.Acceleration);
         }
         else
         {
-            player.SetVelocityTest(playerData.inAirMovementModifier * dir);
+            player.RB.AddForce(dir.normalized * playerData.moveSpeed * playerData.movementMultiplier * playerData.airMultiplier, ForceMode.Acceleration);
         }
     }
     private void CheckJumpMultiplayier()
@@ -69,7 +71,7 @@ public class PlayerInAirState : PlayerState
         {
             if (jumpInputStop)
             {
-                player.setVelocityY(player.CurrentVelocity.y * playerData.jumpHiightMultiplier);
+                //player.setVelocityY(player.CurrentVelocity.y * playerData.jumpHiightMultiplier);
                 isJumping = false;
             }
             else if( player.CurrentVelocity.y <= 0)
@@ -86,4 +88,8 @@ public class PlayerInAirState : PlayerState
 
     }
     public void setIsJumping() => isJumping = true;
+
+
+
+
 }

@@ -22,7 +22,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float sprintMinimum = 2f;
 
-    new CameraMovement camera;
+    //new CameraMovement camera;
     PlayerMovement movement;
     InputHandler playerInput;
 
