@@ -12,14 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98cf9efa8e1f29c45a2b2e62d85f46c3, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 5.0016217
+  moveSpeed: 5.0006647
   airMultiplier: 0.08
   airMultiplierSprint: 0.13
   maxSlope: 15
   WallJumpTime: 0.5
   movementMultiplier: 15
   walkSpeed: 5
-  sprintSpeed: 10
+  sprintSpeed: 9
   acceleration: 10
   jumpForce: 35
   WallJumpVelocity: 300

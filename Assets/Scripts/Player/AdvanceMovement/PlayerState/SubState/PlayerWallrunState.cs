@@ -17,6 +17,7 @@ public class PlayerWallrunState : PlayerAbiltyState
     public override void Enter()
     {
         base.Enter();
+        player.Anim.SetBool("wallRun", true);
         player.RB.useGravity = false;
         isWallRunning = true;
         player.JumpState.RestAmountOfJumpsLeft();
@@ -27,6 +28,7 @@ public class PlayerWallrunState : PlayerAbiltyState
         base.Exit();
         player.RB.useGravity = true;
         isWallRunning = false;
+        player.Anim.SetBool("wallRun", false);
     }
 
     public override void logicUpdate()
