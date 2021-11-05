@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98cf9efa8e1f29c45a2b2e62d85f46c3, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 8.82408
-  airMultiplier: 0.1
-  airMultiplierSprint: 0.15
+  moveSpeed: 5.0016217
+  airMultiplier: 0.08
+  airMultiplierSprint: 0.13
   maxSlope: 15
   WallJumpTime: 0.5
   movementMultiplier: 15
@@ -22,12 +22,9 @@ MonoBehaviour:
   sprintSpeed: 10
   acceleration: 10
   jumpForce: 35
-  WallJumpAngle: {x: 1, y: 2, z: 1}
   WallJumpVelocity: 300
-  wallRunJumpForce: 40
+  wallRunJumpForce: 30
   wallRunGravity: 10
-  MaxwallrunTime: 5
-  MaxWallSpeed: 3
   wallDistance: 0.5
   minimumJumpHeight: 1.5
   groundDrag: 6
