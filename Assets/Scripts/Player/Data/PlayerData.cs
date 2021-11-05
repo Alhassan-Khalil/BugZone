@@ -16,7 +16,7 @@ public class PlayerData : ScriptableObject
     [SerializeField] public float airMultiplier = 0.4f;
     [SerializeField] public float airMultiplierSprint = 0.8f;
     [SerializeField] public float maxSlope = 15f;
-
+    [SerializeField ]public float WallJumpTime = 2f;
     [SerializeField] public float movementMultiplier = 10f;
 
     [Header("Sprinting")]
@@ -26,6 +26,13 @@ public class PlayerData : ScriptableObject
 
     [Header("Jumping")]
     [SerializeField] public float jumpForce = 5f;
+    public float WallJumpVelocity = 20;
+
+    [Header("wallrun Settings")]
+    public float wallRunJumpForce = 40f;
+    public float wallRunGravity = 10f;
+    public float wallDistance = .5f;
+    public float minimumJumpHeight = 1.5f;
 
 
     [Header("Drag")]
@@ -42,16 +49,12 @@ public class PlayerData : ScriptableObject
     [SerializeField] public float slideSpeedThreshold = 5f;
     [SerializeField] public float slideStopThreshold = 2.4f;
     #region adv
-    //[SerializeField] public float moveSpeed = 350f;
-    //[SerializeField] public float movementMultiplier = 9f;
-    //[SerializeField] public float airMultiplier = 10f;
-    //[SerializeField] public float airMultiplierSprint = 15;
+
     [SerializeField] public float crouchheight = 1.5f;
     [SerializeField] public float Standheight = 2.044783f;
     [SerializeField] public float crouchMoveMultiplier = 0.5f;
     [SerializeField] public bool enableInAirDrag;
 
-    //[SerializeField] public float jumpForce = 7f;
     [SerializeField] public int amountOfJump = 2;
     [SerializeField] public float jumpHiightMultiplier = 1.5f;
     #endregion
@@ -83,5 +86,7 @@ public class PlayerData : ScriptableObject
     [SerializeField] public Vector2 sensitivity = new Vector2(20f, 20f);
     [SerializeField] public float sensMultiplier = 0.2f;
     [SerializeField] public float maxAngle = 90f;
+    public float maxWallRunCameratilt = 4f;
+    public float wallRunCameraTilt = 2f;
 
 }

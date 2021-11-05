@@ -58,6 +58,7 @@ public class PlayerMoveState : PlayerGroundedState
         {
             player.RB.AddForce(slopMoveDir.normalized * playerData.moveSpeed * playerData.movementMultiplier, ForceMode.Acceleration);
         }
+
     }
 
 

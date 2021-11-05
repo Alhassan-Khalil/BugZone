@@ -12,29 +12,38 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98cf9efa8e1f29c45a2b2e62d85f46c3, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  moveSpeed: 5.0005856
-  airMultiplier: 0.2
-  airMultiplierSprint: 0.2
+  moveSpeed: 8.82408
+  airMultiplier: 0.1
+  airMultiplierSprint: 0.15
   maxSlope: 15
+  WallJumpTime: 0.5
   movementMultiplier: 15
   walkSpeed: 5
   sprintSpeed: 10
   acceleration: 10
-  jumpForce: 40
+  jumpForce: 35
+  WallJumpAngle: {x: 1, y: 2, z: 1}
+  WallJumpVelocity: 300
+  wallRunJumpForce: 40
+  wallRunGravity: 10
+  MaxwallrunTime: 5
+  MaxWallSpeed: 3
+  wallDistance: 0.5
+  minimumJumpHeight: 1.5
   groundDrag: 6
   airDrag: 2
   enableSlide: 1
   debugSlideTrajectory: 0
-  slideForce: 0.7
-  slideFriction: 3
+  slideForce: 5
+  slideFriction: 1
   slideCooldown: 1
-  slideSpeedThreshold: 1
-  slideStopThreshold: 1
+  slideSpeedThreshold: 2
+  slideStopThreshold: 2
   crouchheight: 1
   Standheight: 2.044783
   crouchMoveMultiplier: 4
   enableInAirDrag: 0
-  amountOfJump: 2
+  amountOfJump: 1
   jumpHiightMultiplier: 0.5
   groundMaxSpeed: 20
   friction: 230
@@ -47,3 +56,5 @@ MonoBehaviour:
   sensitivity: {x: 20, y: 20}
   sensMultiplier: 0.2
   maxAngle: 90
+  maxWallRunCameratilt: 4
+  wallRunCameraTilt: 2

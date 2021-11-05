@@ -34,7 +34,6 @@ public class PlayerSlidingState : PlayerGroundedState
 
             if (!Sliding)
             {
-
                 if (OnCrouch )
                 {
                     stateMachine.ChangeState(player.CrouchState);
@@ -43,7 +42,7 @@ public class PlayerSlidingState : PlayerGroundedState
                 {
                     stateMachine.ChangeState(player.MoveState);
                 }
-        }
+            }
     }
 
     public override void PhysicsUpdate()

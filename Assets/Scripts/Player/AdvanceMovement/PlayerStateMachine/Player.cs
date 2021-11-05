@@ -13,8 +13,9 @@ public class Player : MonoBehaviour
     public PlayerLandState LandState { get; private set; }
     public PlayerCrouchState CrouchState { get; private set; }
     public PlayerSlidingState SlidingState { get; private set; }
+    public PlayerWallJumpState WallJumpState { get; private set; }
+    public PlayerWallrunState wallrunState { get; private set; }
     public CapsuleCollider PlayerCollider { get; private set; }
-
 
 
 
@@ -28,6 +29,14 @@ public class Player : MonoBehaviour
     public Rigidbody RB { get; private set; }
     public Animator Anim { get; private set; }
     public bool CanSetVelcity { get; set; }
+    public bool IsNearWall { get; private set; }
+    public bool IsWallRight { get; private set; }
+    public bool IsWallLeft { get; private set; }
+
+    public RaycastHit leftWallHit;
+    public RaycastHit rightWallHit;
+
+
     public Vector3 CurrentVelocity { get; private set; }
 
 
@@ -37,12 +46,17 @@ public class Player : MonoBehaviour
     [Header("Mouse Look Settings")]
     [SerializeField] public Transform playerCamera;
     [SerializeField] public Transform orientation;
+
+
     private float xRotation = 0f;
     private Vector2 MouseInput;
+
 
     [Header("Ground Check Settings")]
     [SerializeField] private float slopeRaycastDistance = 1f;
     [SerializeField] private LayerMask groundLayer = default;
+    [SerializeField] private LayerMask whatIsWall = default;
+
     public bool grounded;
 
     public float currentSlope=0f;
@@ -63,6 +77,8 @@ public class Player : MonoBehaviour
         LandState = new PlayerLandState(this, StateMachine, playerData, "land");
         CrouchState = new PlayerCrouchState(this, StateMachine, playerData, "crouch");
         SlidingState = new PlayerSlidingState(this, StateMachine, playerData, "slide");
+        WallJumpState = new PlayerWallJumpState(this, StateMachine, playerData, "inAir");
+        wallrunState = new PlayerWallrunState(this , StateMachine, playerData,"wallRun");
 
     }
 
@@ -81,6 +97,7 @@ public class Player : MonoBehaviour
     {
         CurrentVelocity = RB.velocity;
         UpdateMouseLook();
+        CheckForWall();
         StateMachine.CurrentState.logicUpdate();
 
     }
@@ -99,6 +116,12 @@ public class Player : MonoBehaviour
         //RB.AddForce(velocity);
         workspace.Set(velocity.x,CurrentVelocity.y,velocity.z);
         SetFinalVelocity();
+    }
+    public void SetVelocity(float velocity, Vector3 angle, int direction)
+    {
+        angle.Normalize();
+        workspace.Set(angle.x * velocity * direction, angle.y * velocity, angle.z * velocity * direction);
+        SetFinalVelocity();
 
     }
     public void SetVelocity0()
@@ -107,21 +130,6 @@ public class Player : MonoBehaviour
         SetFinalVelocity();
     }
 
-    public void jump()
-    {
-        //RB.AddForce(orientation.up * playerData.jumpForce, ForceMode.VelocityChange);
-        //RB.AddForce(transform.up* playerData.jumpForce, ForceMode.Impulse);
-        //Add jump forces
-        RB.AddForce(Vector2.up * playerData.jumpForce * 1.5f);
-        //RB.AddForce(normalVector * playerData.jumpForce * 0.5f);
-
-        //If jumping while falling, reset y velocity.
-        Vector3 vel = RB.velocity;
-        if (RB.velocity.y < 0.5f)
-            RB.velocity = new Vector3(vel.x, 0, vel.z);
-        else if (RB.velocity.y > 0)
-            RB.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
-    }
     public void setVelocityY(float velocity)
     {
         workspace.Set(CurrentVelocity.x, velocity, CurrentVelocity.z);
@@ -156,16 +164,58 @@ public class Player : MonoBehaviour
 
             Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, slopeRaycastDistance, groundLayer);
             currentSlope = Vector3.Angle(Vector3.up, hit.normal);
+
         }
+            /*            Vector3 forward = -orientation.TransformDirection(Vector3.forward) * 10;
+                        if(!grounded && orientation.position.y > 2f)
+                        {
+                            if (InputHandler.JumpInput)
+                            {
+                                Debug.DrawRay(orientation.position, forward, Color.green,1.25f);
+                                StateMachine.ChangeState(WallJumpState);
+                            }
+                        }*/
+            if (!grounded)
+            {
+                IsNearWall = true;
+            }
+            else
+                IsNearWall = false;
     }
-    private void OnCollisionExit(Collision other) => grounded = false;
-
-    private void OnCollisionEnter(Collision other)
+    private void OnCollisionExit(Collision other)
     {
-        if (SlidingState.CanSlide()) StateMachine.ChangeState(SlidingState);
-        Debug.Log("from collision");
+        grounded = false;
+        IsNearWall = false;
     }
 
+
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (!grounded)
+        {
+            IsNearWall = true;
+            Debug.Log(IsNearWall);
+        }
+        else
+            IsNearWall = false;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        IsNearWall = false;
+    }
+
+    private void CheckForWall()
+    {
+        IsWallRight = Physics.Raycast(transform.position, orientation.right, out rightWallHit, playerData.wallDistance);
+        IsWallLeft = Physics.Raycast(transform.position, -orientation.right, out leftWallHit, playerData.wallDistance);
+
+    }
+    public bool CanWallRun()
+    {
+        return !Physics.Raycast(transform.position, Vector3.down, playerData.minimumJumpHeight);
+    }
     public bool OnSlope()
     {
         if(Physics.Raycast(transform.position,Vector3.down,out slopeHit, PlayerCollider.height/ 2 + 0.5f))
@@ -181,10 +231,6 @@ public class Player : MonoBehaviour
         }
         return false;
     }
-
-
-
-
 
 
     #endregion

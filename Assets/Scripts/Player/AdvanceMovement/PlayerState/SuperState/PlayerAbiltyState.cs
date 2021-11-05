@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class PlayerAbiltyState : PlayerState
 {
-    protected bool IsAbilityDone;
-    protected bool isGrounded;
+    protected Vector3 dir;
+    protected Vector3 input;
 
+
+    protected bool IsAbilityDone;
+    protected bool isWallRunning;
+    protected bool isGrounded;
+    protected bool IsWallRight;
+    protected bool IsWallleft;
+    protected bool JumpInput;
     public PlayerAbiltyState(Player player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolname) : base(player, stateMachine, playerData, animBoolname)
     {
     }
@@ -15,6 +22,9 @@ public class PlayerAbiltyState : PlayerState
     {
         base.DoCheck();
         isGrounded = player.grounded;
+        IsWallRight = player.IsWallRight;
+        IsWallleft = player.IsWallLeft;
+
     }
 
     public override void Enter()
@@ -32,6 +42,8 @@ public class PlayerAbiltyState : PlayerState
     public override void logicUpdate()
     {
         base.logicUpdate();
+        JumpInput = player.InputHandler.JumpInput;
+        input = player.InputHandler.MovementInput;
 
 
         if (IsAbilityDone)
@@ -51,6 +63,8 @@ public class PlayerAbiltyState : PlayerState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        dir = player.orientation.right * input.x + player.orientation.forward * input.y;
+
     }
 }
 
