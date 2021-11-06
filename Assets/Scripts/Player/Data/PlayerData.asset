@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98cf9efa8e1f29c45a2b2e62d85f46c3, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  moveSpeed: 5.0006647
+  airMultiplier: 0.08
+  airMultiplierSprint: 0.13
+  maxSlope: 15
+  WallJumpTime: 0.5
+  movementMultiplier: 15
+  walkSpeed: 5
+  sprintSpeed: 9
+  acceleration: 10
+  jumpForce: 35
+  WallJumpVelocity: 300
+  wallRunJumpForce: 30
+  wallRunGravity: 10
+  wallDistance: 0.5
+  minimumJumpHeight: 1.5
+  groundDrag: 6
+  airDrag: 2
+  enableSlide: 1
+  debugSlideTrajectory: 0
+  slideForce: 5
+  slideFriction: 1
+  slideCooldown: 1
+  slideSpeedThreshold: 2
+  slideStopThreshold: 2
+  crouchheight: 1
+  Standheight: 2.044783
+  crouchMoveMultiplier: 4
+  enableInAirDrag: 0
+  amountOfJump: 1
+  jumpHiightMultiplier: 0.5
+  groundMaxSpeed: 20
+  friction: 230
+  Graviry: 10
+  inAirMaxSpeed: 30
+  sprintMultiplier: 15
+  sprintMaxSpeedModifier: 15
+  crouchMaxSpeed: 5
+  crouchJumpMultiplier: 1.4
+  sensitivity: {x: 20, y: 20}
+  sensMultiplier: 0.2
+  maxAngle: 90
+  maxWallRunCameratilt: 4
+  wallRunCameraTilt: 2
